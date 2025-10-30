@@ -1,48 +1,51 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>4me Teknisyen Paneli</title>
-<style>
-:root{--bg:#f5f7fb;--fg:#0f2740;--line:#e5e7eb;--muted:#6b7280;--card:#fff}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);font-family:system-ui,"Segoe UI",Roboto,Arial,sans-serif;color:#0b1220}
-header{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid var(--line);
-padding:10px 14px;display:flex;justify-content:space-between;align-items:center}
-header h1{margin:0;font-size:16px;color:#0f2740;font-weight:700}
-.who{font-size:12px;color:#374151}
-.btn{appearance:none;border:0;border-radius:12px;padding:10px 12px;font-weight:600;font-size:14px;cursor:pointer}
-.btn.ghost{background:#fff;border:1px solid var(--line)}
-.btn.success{background:linear-gradient(135deg,#16a34a,#22c55e);color:#fff}
-.btn.blue{background:linear-gradient(135deg,#2563eb,#3b82f6);color:#fff}
-.btn.red{background:linear-gradient(135deg,#dc2626,#ef4444);color:#fff}
-.toolbar{display:grid;grid-template-columns:1fr auto;gap:10px;padding:10px 14px;background:#fff;border-bottom:1px solid var(--line)}
-.input,select{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:15px}
-.wrap{padding:10px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px;margin:10px 6px;box-shadow:0 2px 10px rgba(0,0,0,.04)}
-.row1{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:8px;flex-wrap:wrap}
-.status{font-size:12px;font-weight:800;padding:6px 10px;border-radius:999px;border:1px solid var(--line)}
-.s-assigned{background:#fff7ed;color:#b45309;border-color:#fcd34d}
-.s-accepted{background:#f0fdf4;color:#15803d;border-color:#86efac}
-.s-in_progress{background:#eff6ff;color:#1d4ed8;border-color:#93c5fd}
-.meta{font-size:12px;color:#6b7280}
-.title{font-size:15px;font-weight:700;margin:6px 0;color:#0b1220}
-.sub{font-size:13px;color:#374151;white-space:pre-wrap}
-.actions{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
-.detail{display:none;margin-top:8px;padding:10px;border:1px dashed var(--line);border-radius:12px;background:#fafcff}
-textarea{width:100%;min-height:90px;padding:10px;border:1px solid var(--line);border-radius:10px;font-size:14px;resize:vertical;background:#fff}
-.detail-actions{display:flex;gap:8px;margin-top:8px}
-.empty{padding:20px;text-align:center;color:#6b7280}
-.toast{position:fixed;left:50%;transform:translateX(-50%) translateY(10px);bottom:14px;background:#0a7c2f;color:#fff;
-padding:10px 14px;border-radius:12px;font-weight:700;box-shadow:0 8px 30px rgba(0,0,0,.18);opacity:0;transition:.25s}
-.toast.show{opacity:1;transform:translateX(-50%)}
-#loginModal{position:fixed;top:0;left:0;width:100%;height:100%;
-backdrop-filter:blur(10px);background:rgba(0,0,0,.45);
-display:flex;align-items:center;justify-content:center;z-index:999;visibility:hidden;opacity:0;transition:.3s}
-#loginModal.show{visibility:visible;opacity:1}
-.modal-box{background:#fff;padding:20px;border-radius:14px;max-width:90%;width:360px;text-align:left}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>4me Teknisyen Paneli</title>
+  <style>
+    :root{--bg:#f5f7fb;--fg:#0f2740;--line:#e5e7eb;--muted:#6b7280;--card:#fff}
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);font-family:system-ui,"Segoe UI",Roboto,Arial,sans-serif;color:#0b1220}
+    header{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid var(--line);
+      padding:10px 14px;display:flex;justify-content:space-between;align-items:center}
+    header h1{margin:0;font-size:16px;color:#0f2740;font-weight:700}
+    .who{font-size:12px;color:#374151}
+    .btn{appearance:none;border:0;border-radius:12px;padding:10px 12px;font-weight:600;font-size:14px;cursor:pointer}
+    .btn.ghost{background:#fff;border:1px solid var(--line)}
+    .btn.success{background:linear-gradient(135deg,#16a34a,#22c55e);color:#fff}
+    .btn.blue{background:linear-gradient(135deg,#2563eb,#3b82f6);color:#fff}
+    .btn.red{background:linear-gradient(135deg,#dc2626,#ef4444);color:#fff}
+    .toolbar{display:grid;grid-template-columns:1fr auto;gap:10px;padding:10px 14px;background:#fff;border-bottom:1px solid var(--line)}
+    .input,select{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:15px}
+    .wrap{padding:10px}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px;margin:10px 6px;box-shadow:0 2px 10px rgba(0,0,0,.04)}
+    .row1{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:8px;flex-wrap:wrap}
+    .status{font-size:12px;font-weight:800;padding:6px 10px;border-radius:999px;border:1px solid var(--line)}
+    .s-assigned{background:#fff7ed;color:#b45309;border-color:#fcd34d}
+    .s-accepted{background:#f0fdf4;color:#15803d;border-color:#86efac}
+    .s-in_progress{background:#eff6ff;color:#1d4ed8;border-color:#93c5fd}
+    .meta{font-size:12px;color:#6b7280}
+    .title{font-size:15px;font-weight:700;margin:6px 0;color:#0b1220}
+    .sub{font-size:13px;color:#374151;white-space:pre-wrap}
+    .actions{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+    .empty{padding:20px;text-align:center;color:#6b7280}
+    .toast{position:fixed;left:50%;transform:translateX(-50%) translateY(10px);bottom:14px;background:#0a7c2f;color:#fff;
+      padding:10px 14px;border-radius:12px;font-weight:700;box-shadow:0 8px 30px rgba(0,0,0,.18);opacity:0;transition:.25s}
+    .toast.show{opacity:1;transform:translateX(-50%)}
+    @keyframes blink {
+      0%,50%,100%{background-color:#fff7ed}
+      25%,75%{background-color:#f87171}
+    }
+    .blink{animation:blink 1.5s infinite}
+    #loginModal{position:fixed;top:0;left:0;width:100%;height:100%;
+      backdrop-filter:blur(10px);background:rgba(0,0,0,.45);
+      display:flex;align-items:center;justify-content:center;z-index:999;visibility:hidden;opacity:0;transition:.3s}
+    #loginModal.show{visibility:visible;opacity:1}
+    .modal-box{background:#fff;padding:20px;border-radius:14px;max-width:90%;width:360px;text-align:left}
+    textarea.note{width:100%;border:1px solid var(--line);border-radius:10px;padding:8px;font-size:14px;margin-top:6px;resize:vertical}
+  </style>
 </head>
 <body>
 <header>
@@ -55,7 +58,7 @@ display:flex;align-items:center;justify-content:center;z-index:999;visibility:hi
 </header>
 
 <div class="toolbar">
-  <input id="searchInput" class="input" type="search" placeholder="Konu içinde ara...">
+  <input id="searchInput" class="input" type="search" placeholder="Konu içinde ara..." />
   <select id="statusFilter">
     <option value="" selected>Hepsi</option>
     <option value="assigned">Atandı</option>
@@ -80,26 +83,53 @@ display:flex;align-items:center;justify-content:center;z-index:999;visibility:hi
 </div>
 
 <script>
-const API_BASE = "https://4me-proxy.adb-toc.workers.dev/api";
+const API_BASE="https://4me-proxy.adb-toc.workers.dev/api";
+const API_REQ=API_BASE+"/requests?per_page=100";
 let DATA=[],initialLoaded=false,isRefreshing=false;
+const LS_NAME="tech_name",LS_TEAM="tech_team";
 
-function toast(m,ok=true){const t=document.getElementById("toast");t.textContent=m;t.style.background=ok?"#0a7c2f":"#9b1c1c";t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1600);}
+function toast(m,ok=true){
+  const t=document.getElementById("toast");
+  t.textContent=m;t.style.background=ok?"#0a7c2f":"#9b1c1c";
+  t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1600);
+}
 function fmtDate(s){try{return new Date(s).toLocaleString("tr-TR");}catch{return s||"";}}
-function statusBadge(s){const map={assigned:["Atandı","s-assigned"],accepted:["Kabul Edildi","s-accepted"],in_progress:["Devam Ediyor","s-in_progress"]};const [l,c]=map[s]||[s,""];return `<span class="status ${c}">${l}</span>`;}
-function getUser(){return {name:localStorage.getItem("tech_name")||"",team:localStorage.getItem("tech_team")||""};}
-function setUser(n,t){localStorage.setItem("tech_name",n);localStorage.setItem("tech_team",t);paintWho();}
-function clearUser(){localStorage.removeItem("tech_name");localStorage.removeItem("tech_team");paintWho();}
+function statusBadge(s){const map={assigned:["Atandı","s-assigned"],accepted:["Kabul Edildi","s-accepted"],in_progress:["Devam Ediyor","s-in_progress"]};
+  const [l,c]=map[s]||[s,""];return `<span class="status ${c}">${l}</span>`;}
+function getUser(){return {name:localStorage.getItem(LS_NAME)||"",team:localStorage.getItem(LS_TEAM)||""};}
+function setUser(n,t){localStorage.setItem(LS_NAME,n);localStorage.setItem(LS_TEAM,t);paintWho();}
+function clearUser(){localStorage.removeItem(LS_NAME);localStorage.removeItem(LS_TEAM);paintWho();}
+function show(el,on=true){el.classList.toggle("show",on);}
 function paintWho(){const b=document.getElementById("whoBox");const u=getUser();b.textContent=u.name&&u.team?`${u.name} • ${u.team}`:"";}
 
 async function fetchRequests(){
-  const r=await fetch(`${API_BASE}/requests?per_page=100`);
+  const r=await fetch(API_REQ);
   if(!r.ok)throw new Error("HTTP "+r.status);
   let d=await r.json();
-  if(!Array.isArray(d)) d=d.requests||[];
+  if(Array.isArray(d.requests))d=d.requests;
   return d;
 }
 
-async function patchRequest(id,body){
+async function safeRefresh(){
+  if(isRefreshing)return;isRefreshing=true;
+  try{
+    const fresh=await fetchRequests();
+    if(Array.isArray(fresh)){
+      DATA=fresh;
+      if(!initialLoaded){fillTeams();initialLoaded=true;}
+      renderList();
+    }
+  }catch(e){toast("Yenileme hatası",false);}
+  finally{isRefreshing=false;}
+}
+
+function fillTeams(){
+  const s=document.getElementById("teamSelect");
+  const teams=[...new Set(DATA.map(r=>r.team?.name).filter(Boolean))].sort();
+  s.innerHTML='<option value="">Ekip seçiniz…</option>'+teams.map(t=>`<option value="${t}">${t}</option>`).join("");
+}
+
+async function updateRequest(id,body){
   const r=await fetch(`${API_BASE}/requests/${id}`,{
     method:"PATCH",
     headers:{"Content-Type":"application/json"},
@@ -109,81 +139,80 @@ async function patchRequest(id,body){
   return await r.json();
 }
 
-async function safeRefresh(){
- if(isRefreshing) return;
- isRefreshing=true;
- try{
-   const fresh=await fetchRequests();
-   DATA=fresh;
-   if(!initialLoaded){fillTeams();initialLoaded=true;}
-   renderList();
- }catch(e){toast("Yenileme hatası",false);}
- finally{isRefreshing=false;}
-}
-
-function fillTeams(){
- const s=document.getElementById("teamSelect");
- const teams=[...new Set(DATA.map(r=>r.team?.name).filter(Boolean))].sort();
- s.innerHTML='<option value="">Ekip seçiniz…</option>'+teams.map(t=>`<option value="${t}">${t}</option>`).join("");
+async function addNote(id,text){
+  const r=await fetch(`${API_BASE}/requests/${id}/notes`,{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({text:text})
+  });
+  if(!r.ok)throw new Error("HTTP "+r.status);
 }
 
 function renderList(){
- const q=document.getElementById("searchInput").value.toLowerCase();
- const f=document.getElementById("statusFilter").value;
- const list=document.getElementById("list");
- const u=getUser();
- let items=DATA.filter(r=>(!u.team||(r.team?.name||"")===u.team));
- if(q)items=items.filter(r=>(r.subject||"").toLowerCase().includes(q));
- if(f)items=items.filter(r=>r.status===f);
- const order={assigned:1,accepted:2,in_progress:3};
- items.sort((a,b)=>(order[a.status]||9)-(order[b.status]||9));
- if(!items.length){list.innerHTML='<div class="empty">Kayıt yok.</div>';return;}
- const frag=document.createDocumentFragment();
- for(const r of items){
-   const assignee=r.assigned_to?.name||r.assigned_to?.email||"Belirtilmemiş";
-   const card=document.createElement("div");card.className="card";
-   card.innerHTML=`
-     <div class="row1"><div>${statusBadge(r.status)} <span class="meta">${fmtDate(r.created_at)}</span></div><div class="meta">#${r.id}</div></div>
-     <div class="title">${r.team?.name||""}<span class="tag">${r.service_instance?.name||""}</span></div>
-     <div class="sub">${r.subject||""}\n👤 Atanan Kişi: ${assignee}\n👷‍♂️ ${u.name}</div>
-     <div class="actions">
-       <button class="btn success" data-act="accept" data-id="${r.id}">Kabul Et</button>
-       <button class="btn blue" data-act="detail" data-id="${r.id}">Açıklama Ekle</button>
-     </div>
-     <div class="detail" id="detail-${r.id}">
-       <textarea id="note-${r.id}" placeholder="Yeni çözüm açıklaması ekle..."></textarea>
-       <div class="detail-actions">
-         <button class="btn blue" data-act="save" data-id="${r.id}">Kaydet</button>
-         <button class="btn ghost" data-act="close" data-id="${r.id}">Kapat</button>
-       </div>
-     </div>`;
-   frag.appendChild(card);
- }
- list.replaceChildren(frag);
+  const q=document.getElementById("searchInput").value.toLowerCase();
+  const f=document.getElementById("statusFilter").value;
+  const list=document.getElementById("list");
+  const u=getUser();
+  let items=DATA.filter(r=>(!u.team||(r.team?.name||"")===u.team));
+  if(q)items=items.filter(r=>(r.subject||"").toLowerCase().includes(q));
+  if(f)items=items.filter(r=>r.status===f);
+  const order={assigned:1,accepted:2,in_progress:3};
+  items.sort((a,b)=>(order[a.status]||9)-(order[b.status]||9));
+  if(!items.length){list.innerHTML='<div class="empty">Kayıt yok.</div>';return;}
+  const frag=document.createDocumentFragment();
+  for(const r of items){
+    const assignee=r.assigned_to?.name||r.assigned_to?.email||"Belirtilmemiş";
+    const note=(r.custom_fields||[]).find(x=>x.id==="work_desc")?.value||"";
+    const card=document.createElement("div");card.className="card";
+    if(r.status==="assigned")card.classList.add("blink");
+    card.innerHTML=`
+      <div class="row1"><div>${statusBadge(r.status)} <span class="meta">${fmtDate(r.created_at)}</span></div><div class="meta">#${r.id}</div></div>
+      <div class="title">${r.team?.name||""}<span class="tag">${r.service_instance?.name||""}</span></div>
+      <div class="sub">${r.subject||""}\n👤 Atanan Kişi: ${assignee}\n${note?`\n🧾 ${note}`:""}\n👷‍♂️ ${u.name}</div>
+      <div class="actions">
+        ${r.status==="assigned"?`<button class="btn success" data-act="accept" data-id="${r.id}">Kabul Et</button>`:""}
+        <button class="btn blue" data-act="note" data-id="${r.id}">Açıklama Ekle</button>
+      </div>
+    `;
+    frag.appendChild(card);
+  }
+  list.replaceChildren(frag);
+
+  list.querySelectorAll("button").forEach(btn=>{
+    btn.onclick=async()=>{
+      const id=btn.dataset.id,act=btn.dataset.act;
+      try{
+        if(act==="accept"){
+          await updateRequest(id,{status:"accepted"});
+          toast("Kayıt kabul edildi");
+        }else if(act==="note"){
+          const t=prompt("Açıklama gir:");
+          if(!t)return;
+          await addNote(id,t);
+          toast("Not eklendi");
+        }
+        await safeRefresh();
+      }catch(e){toast("İşlem hatası: "+e.message,false);}
+    };
+  });
 }
 
-document.getElementById("list").addEventListener("click",async e=>{
- const btn=e.target.closest("button"); if(!btn)return;
- const id=+btn.dataset.id,act=btn.dataset.act;
- if(act==="detail"){const d=document.getElementById(`detail-${id}`);d.style.display=d.style.display==="block"?"none":"block";return;}
- if(act==="close"){document.getElementById(`detail-${id}`).style.display="none";return;}
- if(act==="accept"){
-   btn.disabled=true;btn.textContent="Gönderiliyor…";
-   try{
-     await patchRequest(id,{status:"accepted"});
-     toast("Kayıt kabul edildi");
-     const rec=DATA.find(x=>x.id===id);if(rec)rec.status="accepted";
-     renderList();
-   }catch(err){toast("Hata:"+err.message,false);}
-   finally{btn.disabled=false;btn.textContent="Kabul Et";}
- }
- if(act==="save"){
-   const ta=document.getElementById(`note-${id}`);
-   const newText=ta.value.trim();
-   if(!newText)return toast("Boş açıklama kaydedilmez",false);
-   btn.disabled=true;btn.textContent="Kaydediliyor…";
-   try{
-     // işte burası fark: artık completion_note’a yazıyor
-     await patchRequest(id,{completion_note:newText});
-     toast("Çözüm açıklaması kaydedildi");
-     document.getElementById(`detail-${id}`).
+document.getElementById("refreshBtn").onclick=safeRefresh;
+document.getElementById("logoutBtn").onclick=()=>{clearUser();show(document.getElementById("loginModal"),true);};
+document.getElementById("searchInput").oninput=renderList;
+document.getElementById("statusFilter").onchange=renderList;
+document.getElementById("loginBtn").onclick=()=>{
+  const n=document.getElementById("nameInput").value.trim();
+  const t=document.getElementById("teamSelect").value;
+  if(!n)return toast("Ad soyad gir",false);
+  if(!t)return toast("Ekip seç",false);
+  setUser(n,t);
+  show(document.getElementById("loginModal"),false);
+  renderList();safeRefresh();
+};
+
+paintWho();
+(async()=>{await safeRefresh();const u=getUser();show(document.getElementById("loginModal"),!(u.name&&u.team));})();
+</script>
+</body>
+</html>
