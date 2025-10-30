@@ -39,12 +39,12 @@
       25%,75%{background-color:#f87171}
     }
     .blink{animation:blink 1.5s infinite}
-    /* login modal */
     #loginModal{position:fixed;top:0;left:0;width:100%;height:100%;
       backdrop-filter:blur(10px);background:rgba(0,0,0,.45);
       display:flex;align-items:center;justify-content:center;z-index:999;visibility:hidden;opacity:0;transition:.3s}
     #loginModal.show{visibility:visible;opacity:1}
     .modal-box{background:#fff;padding:20px;border-radius:14px;max-width:90%;width:360px;text-align:left}
+    textarea.note{width:100%;border:1px solid var(--line);border-radius:10px;padding:8px;font-size:14px;margin-top:6px;resize:vertical}
   </style>
 </head>
 <body>
@@ -70,7 +70,6 @@
 <div id="list" class="wrap"><div class="empty">Yükleniyor…</div></div>
 <div id="toast" class="toast"></div>
 
-<!-- login modal -->
 <div id="loginModal" class="modal">
   <div class="modal-box">
     <h2>Giriş</h2>
@@ -84,45 +83,35 @@
 </div>
 
 <script>
-const API = "https://4me-proxy.adb-toc.workers.dev/api/requests?per_page=100";
+const API_BASE="https://4me-proxy.adb-toc.workers.dev/api";
+const API_REQ=API_BASE+"/requests?per_page=100";
 let DATA=[],initialLoaded=false,isRefreshing=false;
 const LS_NAME="tech_name",LS_TEAM="tech_team";
 
 function toast(m,ok=true){
   const t=document.getElementById("toast");
   t.textContent=m;t.style.background=ok?"#0a7c2f":"#9b1c1c";
-  t.classList.add("show");
-  setTimeout(()=>t.classList.remove("show"),1600);
+  t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1600);
 }
-
 function fmtDate(s){try{return new Date(s).toLocaleString("tr-TR");}catch{return s||"";}}
-
-function statusBadge(s){
-  const map={assigned:["Atandı","s-assigned"],accepted:["Kabul Edildi","s-accepted"],in_progress:["Devam Ediyor","s-in_progress"]};
-  const [l,c]=map[s]||[s,""];return `<span class="status ${c}">${l}</span>`;
-}
-
+function statusBadge(s){const map={assigned:["Atandı","s-assigned"],accepted:["Kabul Edildi","s-accepted"],in_progress:["Devam Ediyor","s-in_progress"]};
+  const [l,c]=map[s]||[s,""];return `<span class="status ${c}">${l}</span>`;}
 function getUser(){return {name:localStorage.getItem(LS_NAME)||"",team:localStorage.getItem(LS_TEAM)||""};}
 function setUser(n,t){localStorage.setItem(LS_NAME,n);localStorage.setItem(LS_TEAM,t);paintWho();}
 function clearUser(){localStorage.removeItem(LS_NAME);localStorage.removeItem(LS_TEAM);paintWho();}
 function show(el,on=true){el.classList.toggle("show",on);}
-function paintWho(){
-  const b=document.getElementById("whoBox");
-  const u=getUser();
-  b.textContent=u.name&&u.team?`${u.name} • ${u.team}`:"";
-}
+function paintWho(){const b=document.getElementById("whoBox");const u=getUser();b.textContent=u.name&&u.team?`${u.name} • ${u.team}`:"";}
 
 async function fetchRequests(){
-  const r=await fetch(API);
+  const r=await fetch(API_REQ);
   if(!r.ok)throw new Error("HTTP "+r.status);
   let d=await r.json();
-  if(Array.isArray(d.requests)) d=d.requests;
+  if(Array.isArray(d.requests))d=d.requests;
   return d;
 }
 
 async function safeRefresh(){
-  if(isRefreshing)return;
-  isRefreshing=true;
+  if(isRefreshing)return;isRefreshing=true;
   try{
     const fresh=await fetchRequests();
     if(Array.isArray(fresh)){
@@ -138,6 +127,25 @@ function fillTeams(){
   const s=document.getElementById("teamSelect");
   const teams=[...new Set(DATA.map(r=>r.team?.name).filter(Boolean))].sort();
   s.innerHTML='<option value="">Ekip seçiniz…</option>'+teams.map(t=>`<option value="${t}">${t}</option>`).join("");
+}
+
+async function updateRequest(id,body){
+  const r=await fetch(`${API_BASE}/requests/${id}`,{
+    method:"PATCH",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify(body)
+  });
+  if(!r.ok)throw new Error("HTTP "+r.status);
+  return await r.json();
+}
+
+async function addNote(id,text){
+  const r=await fetch(`${API_BASE}/requests/${id}/notes`,{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({text:text})
+  });
+  if(!r.ok)throw new Error("HTTP "+r.status);
 }
 
 function renderList(){
@@ -161,10 +169,32 @@ function renderList(){
       <div class="row1"><div>${statusBadge(r.status)} <span class="meta">${fmtDate(r.created_at)}</span></div><div class="meta">#${r.id}</div></div>
       <div class="title">${r.team?.name||""}<span class="tag">${r.service_instance?.name||""}</span></div>
       <div class="sub">${r.subject||""}\n👤 Atanan Kişi: ${assignee}\n${note?`\n🧾 ${note}`:""}\n👷‍♂️ ${u.name}</div>
+      <div class="actions">
+        ${r.status==="assigned"?`<button class="btn success" data-act="accept" data-id="${r.id}">Kabul Et</button>`:""}
+        <button class="btn blue" data-act="note" data-id="${r.id}">Açıklama Ekle</button>
+      </div>
     `;
     frag.appendChild(card);
   }
   list.replaceChildren(frag);
+
+  list.querySelectorAll("button").forEach(btn=>{
+    btn.onclick=async()=>{
+      const id=btn.dataset.id,act=btn.dataset.act;
+      try{
+        if(act==="accept"){
+          await updateRequest(id,{status:"accepted"});
+          toast("Kayıt kabul edildi");
+        }else if(act==="note"){
+          const t=prompt("Açıklama gir:");
+          if(!t)return;
+          await addNote(id,t);
+          toast("Not eklendi");
+        }
+        await safeRefresh();
+      }catch(e){toast("İşlem hatası: "+e.message,false);}
+    };
+  });
 }
 
 document.getElementById("refreshBtn").onclick=safeRefresh;
@@ -178,8 +208,7 @@ document.getElementById("loginBtn").onclick=()=>{
   if(!t)return toast("Ekip seç",false);
   setUser(n,t);
   show(document.getElementById("loginModal"),false);
-  renderList();
-  safeRefresh();
+  renderList();safeRefresh();
 };
 
 paintWho();
